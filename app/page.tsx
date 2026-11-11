@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight, ExternalLink, Sparkles } from "lucide-react";
 
 type Field = "All" | "AI & Data" | "Python" | "Flutter" | "Web";
 
@@ -24,9 +24,35 @@ const stackGroups = [
   { id: "Web", title: "Web engineering", summary: "Responsive client experiences connected to dependable application services.", tools: [["react", "React"], ["nextdotjs", "Next.js"], ["typescript", "TypeScript"], ["html5", "HTML"], ["css", "CSS"], ["git", "Git"]] },
 ];
 
-const radar = [
-  { label: "AI / ML", value: 88 }, { label: "Python", value: 92 }, { label: "Data", value: 84 },
-  { label: "Web", value: 78 }, { label: "Flutter", value: 90 }, { label: "Product", value: 82 },
+const roleProfiles = [
+  { id: "data-engineer", title: "Data Engineer", short: "Data Engineering", summary: "Building dependable pipelines, warehouses, integrations, and analytics-ready data systems.", accent: "#b9ff66", skills: [
+    { label: "Python & SQL", value: 92 }, { label: "ETL / ELT", value: 90 }, { label: "Azure", value: 82 },
+    { label: "AWS", value: 76 }, { label: "Spark", value: 72 }, { label: "Warehousing", value: 86 },
+  ]},
+  { id: "ai-engineer", title: "AI / ML Engineer", short: "AI Engineering", summary: "Turning machine-learning and document-intelligence capabilities into usable products.", accent: "#8b7cff", skills: [
+    { label: "Model Serving", value: 88 }, { label: "Document AI", value: 92 }, { label: "Computer Vision", value: 80 },
+    { label: "LLM Workflows", value: 86 }, { label: "Scikit-learn", value: 88 }, { label: "TensorFlow", value: 78 },
+  ]},
+  { id: "data-scientist", title: "Data Scientist", short: "Data Science", summary: "Exploring data, engineering useful features, evaluating models, and communicating results.", accent: "#ffbf69", skills: [
+    { label: "EDA", value: 92 }, { label: "Pandas", value: 94 }, { label: "Feature Eng.", value: 86 },
+    { label: "Modeling", value: 88 }, { label: "Evaluation", value: 88 }, { label: "Visualization", value: 82 },
+  ]},
+  { id: "python-engineer", title: "Python Engineer", short: "Python", summary: "Developing APIs, automation, scraping, integrations, and maintainable backend services.", accent: "#5eead4", skills: [
+    { label: "FastAPI", value: 90 }, { label: "Django / Flask", value: 82 }, { label: "Web Scraping", value: 88 },
+    { label: "Automation", value: 92 }, { label: "REST APIs", value: 92 }, { label: "Testing", value: 80 },
+  ]},
+  { id: "flutter-developer", title: "Flutter Developer", short: "Flutter", summary: "Delivering polished cross-platform products with reliable state, APIs, and cloud services.", accent: "#64d8ff", skills: [
+    { label: "Flutter / Dart", value: 94 }, { label: "UI Systems", value: 92 }, { label: "State Mgmt.", value: 88 },
+    { label: "Firebase", value: 86 }, { label: "API Integration", value: 92 }, { label: "Mobile Release", value: 78 },
+  ]},
+  { id: "full-stack", title: "Full-Stack Developer", short: "Full Stack", summary: "Connecting responsive web experiences to robust APIs, databases, and deployment workflows.", accent: "#ff7aa8", skills: [
+    { label: "React / Next.js", value: 84 }, { label: "Backend APIs", value: 92 }, { label: "PostgreSQL", value: 86 },
+    { label: "Auth & Security", value: 82 }, { label: "Docker", value: 78 }, { label: "Deployment", value: 82 },
+  ]},
+  { id: "quality-engineer", title: "Software QA Engineer", short: "Quality Engineering", summary: "Designing practical quality checks across APIs, interfaces, data flows, and releases.", accent: "#f8e16c", skills: [
+    { label: "Test Design", value: 82 }, { label: "API Testing", value: 84 }, { label: "UI Testing", value: 78 },
+    { label: "Data Quality", value: 88 }, { label: "Automation", value: 80 }, { label: "Regression", value: 78 },
+  ]},
 ];
 
 function point(value: number, index: number, total = 6, radius = 128) {
@@ -39,6 +65,8 @@ function polygon(values: number[]) { return values.map((value, index) => point(v
 export default function Home() {
   const [filter, setFilter] = useState<Field>("All");
   const [activeStack, setActiveStack] = useState(stackGroups[0]);
+  const [activeRole, setActiveRole] = useState(roleProfiles[0]);
+  const [hoveredSkill, setHoveredSkill] = useState<number | null>(null);
   const visible = filter === "All" ? projects : projects.filter((project) => project.stack.includes(filter));
 
   return <main>
@@ -51,10 +79,12 @@ export default function Home() {
     <section className="hero" id="top">
       <div className="hero-grid" aria-hidden="true"/>
       <div className="hero-copy"><div className="availability"><span/>Available for opportunities</div><p className="eyebrow">Data &amp; AI engineer · Flutter &amp; Python developer</p><h1>I engineer intelligent products with <em>clarity and purpose.</em></h1><p className="hero-lede">From predictive systems and document intelligence to polished mobile and web products, I connect the model, the backend, and the experience.</p><div className="hero-actions"><a className="button button-primary" href="#about">Get to know me <ArrowRight size={17}/></a><a className="button button-secondary" href="#work">Explore projects</a></div></div>
-      <div className="radar-card" aria-label="Relative experience across engineering fields"><div className="radar-title"><span>FIELD PROFILE</span><small>Relative project experience</small></div><svg viewBox="0 0 320 320" role="img" aria-label="Radar chart showing strongest experience in Python, Flutter, and AI">{[25,50,75,100].map(level => <polygon key={level} points={polygon(radar.map(() => level))} className="radar-grid"/>)}{radar.map((_,i) => { const [x,y]=point(100,i); return <line key={i} x1="160" y1="160" x2={x} y2={y} className="radar-axis"/>; })}<polygon points={polygon(radar.map(item => item.value))} className="radar-shape"/>{radar.map((item,index) => { const [x,y]=point(100,index); return <g key={item.label}><circle cx={x} cy={y} r="3" className="radar-dot"/><text x={x} y={y+(y<160?-12:18)} textAnchor={x<150?"end":x>170?"start":"middle"} className="radar-label">{item.label}</text></g>; })}</svg><p>Based on the balance of work represented in this portfolio—not a certification score.</p></div>
+      <div className="hero-role-card"><div className="role-orbit"><span>Data</span><span>AI</span><span>Python</span><span>Flutter</span><div className="role-core"><Sparkles size={20}/><strong>Multi-disciplinary</strong><small>Engineer</small></div></div><p>One engineering profile across data systems, intelligent automation, mobile products, and full-stack delivery.</p><a href="#expertise">Explore role by role <ArrowRight size={15}/></a></div>
     </section>
 
     <section className="about-section" id="about"><div className="about-kicker"><span>01</span><p>About me</p></div><div className="about-copy"><h2>Range across disciplines.<br/><em>Focus on outcomes.</em></h2><p className="about-lead">I&apos;m Abdul Hadi Jalil—a data and AI engineer, Flutter developer, and Python full-stack developer.</p><div className="about-columns"><p>I work where intelligent models, reliable backend systems, and thoughtful interfaces meet. My projects span education, document intelligence, healthcare, augmented reality, and predictive applications.</p><p>I care about more than making software run. I structure products so clients and teams can understand the architecture, evaluate the decisions, and confidently build on the result.</p></div><a className="text-link" href="https://github.com/Abdul-Hadi-Jalil" target="_blank" rel="noreferrer"><ExternalLink size={18}/>Explore my engineering work</a></div></section>
+
+    <section className="expertise-section" id="expertise"><div className="section-heading"><div><p className="eyebrow">Role-based experience</p><h2>Select a role.<br/>Inspect the depth.</h2></div><p>Choose the job profile relevant to your team. The chart changes to show the practical skills represented by my portfolio work.</p></div><div className="expertise-shell"><div className="role-selector" role="tablist" aria-label="Engineering roles">{roleProfiles.map(role => <button key={role.id} role="tab" aria-selected={activeRole.id===role.id} className={activeRole.id===role.id?"active":""} onClick={() => { setActiveRole(role); setHoveredSkill(null); }}><span>{role.title}</span><small>{role.skills.length} capabilities</small></button>)}</div><div className="experience-panel" style={{"--role-accent":activeRole.accent} as React.CSSProperties}><div className="experience-copy"><p className="eyebrow">Current view</p><h3>{activeRole.title}</h3><p>{activeRole.summary}</p><div className="metric-highlight"><strong>{hoveredSkill===null?activeRole.short:activeRole.skills[hoveredSkill].label}</strong><span>{hoveredSkill===null?"Hover or focus a point to inspect the level":`${activeRole.skills[hoveredSkill].value}% relative project depth`}</span></div></div><div className="interactive-radar"><svg viewBox="0 0 320 320" role="img" aria-label={`${activeRole.title} capability chart`}>{[25,50,75,100].map(level => <polygon key={level} points={polygon(activeRole.skills.map(() => level))} className="radar-grid"/>)}{activeRole.skills.map((_,i) => { const [x,y]=point(100,i); return <line key={i} x1="160" y1="160" x2={x} y2={y} className="radar-axis"/>; })}<polygon points={polygon(activeRole.skills.map(item => item.value))} className="radar-shape"/>{activeRole.skills.map((item,index) => { const [x,y]=point(100,index); const [px,py]=point(item.value,index); return <g key={item.label} className="radar-skill" tabIndex={0} role="button" aria-label={`${item.label}: ${item.value}%`} onMouseEnter={() => setHoveredSkill(index)} onMouseLeave={() => setHoveredSkill(null)} onFocus={() => setHoveredSkill(index)} onBlur={() => setHoveredSkill(null)}><circle cx={px} cy={py} r={hoveredSkill===index?7:5} className="radar-dot"/><circle cx={px} cy={py} r="16" className="radar-hit"/><text x={x} y={y+(y<160?-13:20)} textAnchor={x<150?"end":x>170?"start":"middle"} className="radar-label">{item.label}</text>{hoveredSkill===index&&<g className="radar-tooltip"><rect x={px-27} y={py-38} width="54" height="25" rx="8"/><text x={px} y={py-21} textAnchor="middle">{item.value}%</text></g>}</g>; })}</svg><p>Relative depth based on implemented portfolio work—not a certification score.</p></div></div></div></section>
 
     <section className="stack-section" id="stack"><div className="section-heading"><div><p className="eyebrow">Technology stack</p><h2>Choose a field.<br/>See the tools behind it.</h2></div><p>Select a discipline to explore the technologies, products, frameworks, and platforms I have worked with.</p></div><div className="stack-explorer"><div className="stack-tabs" role="tablist">{stackGroups.map((group,index) => <button key={group.id} className={activeStack.id===group.id?"active":""} onClick={() => setActiveStack(group)} role="tab" aria-selected={activeStack.id===group.id}><span>0{index+1}</span><strong>{group.title}</strong><ArrowRight size={18}/></button>)}</div><div className="stack-detail" role="tabpanel"><p className="stack-summary">{activeStack.summary}</p><div className="tool-grid">{activeStack.tools.map(([slug,name]) => <div className="tool" key={name}><img src={`https://cdn.simpleicons.org/${slug}`} alt=""/><span>{name}</span></div>)}</div></div></div></section>
 
