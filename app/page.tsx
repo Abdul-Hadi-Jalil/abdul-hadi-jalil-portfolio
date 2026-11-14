@@ -21,7 +21,7 @@ const stackGroups = [
   { id: "Flutter", title: "Flutter products", summary: "Cross-platform applications from interface to backend integration.", tools: [["flutter", "Flutter"], ["dart", "Dart"], ["firebase", "Firebase"], ["supabase", "Supabase"], ["androidstudio", "Android Studio"], ["figma", "Figma"]] },
   { id: "AI & Data", title: "AI & data engineering", summary: "Models, document intelligence, computer vision, and production data workflows.", tools: [["python", "Python"], ["tensorflow", "TensorFlow"], ["scikitlearn", "Scikit-learn"], ["pandas", "Pandas"], ["opencv", "OpenCV"], ["jupyter", "Jupyter"]] },
   { id: "Python", title: "Python full stack", summary: "Reliable APIs, model serving, automation, and database-backed products.", tools: [["python", "Python"], ["fastapi", "FastAPI"], ["django", "Django"], ["flask", "Flask"], ["postgresql", "PostgreSQL"], ["docker", "Docker"]] },
-  { id: "Web", title: "Web engineering", summary: "Responsive client experiences connected to dependable application services.", tools: [["react", "React"], ["nextdotjs", "Next.js"], ["typescript", "TypeScript"], ["html5", "HTML"], ["css", "CSS"], ["git", "Git"]] },
+  { id: "Web", title: "Web engineering", summary: "Responsive interfaces connected to dependable Python services and databases.", tools: [["html5", "HTML"], ["css", "CSS"], ["javascript", "JavaScript"], ["django", "Django"], ["flask", "Flask"], ["postgresql", "PostgreSQL"]] },
 ];
 
 const roleProfiles = [
@@ -46,7 +46,7 @@ const roleProfiles = [
     { label: "Firebase", value: 86 }, { label: "API Integration", value: 92 }, { label: "Mobile Release", value: 78 },
   ]},
   { id: "full-stack", title: "Full-Stack Developer", short: "Full Stack", summary: "Connecting responsive web experiences to robust APIs, databases, and deployment workflows.", accent: "#ff7aa8", skills: [
-    { label: "React / Next.js", value: 84 }, { label: "Backend APIs", value: 92 }, { label: "PostgreSQL", value: 86 },
+    { label: "Web Interfaces", value: 84 }, { label: "Backend APIs", value: 92 }, { label: "PostgreSQL", value: 86 },
     { label: "Auth & Security", value: 82 }, { label: "Docker", value: 78 }, { label: "Deployment", value: 82 },
   ]},
   { id: "quality-engineer", title: "Software QA Engineer", short: "Quality Engineering", summary: "Designing practical quality checks across APIs, interfaces, data flows, and releases.", accent: "#f8e16c", skills: [

@@ -14,8 +14,8 @@ Professional engineering portfolio showcasing selected work across data and AI, 
 
 ## Stack
 
-- React 19 and TypeScript
-- Next.js 16 with static export
+- Static web application with a component-based interface
+- Next.js 16 static export
 - CSS with responsive layouts and accessible interactions
 - Lucide interface icons and Simple Icons technology marks
 - Render Static Site hosting
