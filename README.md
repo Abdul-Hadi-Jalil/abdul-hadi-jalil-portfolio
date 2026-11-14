@@ -1,15 +1,16 @@
 # Abdul Hadi Jalil — Portfolio
 
-Professional engineering portfolio showcasing selected work across data and AI, Python full-stack development, Flutter, and modern web engineering.
+Professional engineering portfolio showcasing selected work across data engineering, applied AI, Python systems, and Flutter product development.
 
 ## Experience
 
 - Responsive, presentation-led portfolio design
 - About section placed before technical work
-- Interactive technology stack explorer with software icons
-- Field-specific details for Flutter, AI and data, Python, and web engineering
-- Radar visualization showing relative experience across disciplines
-- Multi-category project filtering with real project screenshots
+- Nested technology explorer covering fields, specializations, tools, and portfolio-evidence depth
+- Field-specific details for data engineering, cloud, AI, Python, backend automation, and Flutter
+- Multi-category project filtering with architecture views and real product screenshots
+- Professional portrait and real-color GitHub, LinkedIn, and email links
+- Prepared sections for verified work experience, achievements, certifications, and CV
 - Direct links to documented GitHub repositories
 
 ## Stack
@@ -17,7 +18,7 @@ Professional engineering portfolio showcasing selected work across data and AI, 
 - Static web application with a component-based interface
 - Next.js 16 static export
 - CSS with responsive layouts and accessible interactions
-- Lucide interface icons and Simple Icons technology marks
+- Lucide interface icons and custom brand marks
 - Render Static Site hosting
 
 ## Local setup
