@@ -14,3 +14,18 @@ footer{min-height:100px;background:#08090e;color:white;border-top:1px solid #fff
 @media(max-width:1000px){.hero-section{grid-template-columns:1fr;padding-top:125px}.portrait-wrap{max-width:470px}.about-simple{grid-template-columns:1fr}.section-heading{grid-template-columns:1fr;gap:22px}.category-tabs{grid-template-columns:repeat(3,1fr)}.skill-stage{grid-template-columns:1fr}.skill-context{grid-row:auto}.showcase-card,.showcase-card:nth-child(even){grid-template-columns:1fr}.showcase-card:nth-child(even) .project-visual{order:0}.project-visual{min-height:420px}.contact-section{grid-template-columns:1fr}.credential-preview{grid-template-columns:1fr}}
 @media(max-width:720px){.site-nav{padding:0 18px}.nav-brand strong,.nav-hire{display:none}.nav-toggle{display:block}.nav-links{position:absolute;top:72px;left:14px;right:14px;background:white;border:1px solid var(--line);border-radius:15px;padding:14px;display:none;flex-direction:column;gap:0;box-shadow:0 20px 50px #11121820}.nav-links.open{display:flex}.nav-links a{padding:12px}.hero-section{padding:112px 20px 65px}.hero-content h1{font-size:49px}.hero-summary{font-size:15px}.portrait-note{left:12px}.about-simple,.skills-section,.projects-section,.experience-section,.contact-section{padding:78px 20px}.about-grid{grid-template-columns:1fr;gap:18px}.category-tabs{grid-template-columns:1fr 1fr}.skill-stage{padding:22px}.tool-cloud{grid-template-columns:1fr}.showcase-card{min-height:auto}.project-visual{min-height:350px;padding:22px}.project-copy{padding:27px}.architecture-visual{grid-template-columns:1fr 1fr;gap:12px}.flow-arrow{display:none}.flow-node{min-height:88px}.phone-gallery{height:350px}.phone{height:320px;width:165px}.analysis-gallery{grid-template-columns:1fr}.analysis-gallery img{height:190px}.form-row{grid-template-columns:1fr}footer{flex-direction:column;text-align:center;padding:40px 20px}footer .nav-brand strong{display:block}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.social,.tool-cloud span{transition:none;animation:none}}
+
+.social-row {
+  flex-wrap: wrap;
+  align-items: center;
+}
+.social-row .button {
+  min-height: 43px;
+}
+.credential-preview p + p {
+  margin-top: 14px;
+}
+.credential-preview a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
