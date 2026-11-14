@@ -1,96 +1,104 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowRight, ExternalLink, Sparkles } from "lucide-react";
+import { FormEvent, useState } from "react";
+import { ArrowRight, BarChart3, Blocks, BrainCircuit, BriefcaseBusiness, CheckCircle2, Cloud, Code2, Database, Download, ExternalLink, Mail, Menu, Network, Send, Server, Smartphone, Sparkles, X } from "lucide-react";
 
-type Field = "All" | "AI & Data" | "Python" | "Flutter" | "Web";
+function Github({ size = 20 }: { size?: number }) {
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .7A11.3 11.3 0 0 0 8.4 22.8c.6.1.8-.2.8-.5v-2.2c-3.4.7-4.1-1.4-4.1-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2A11.4 11.4 0 0 1 12 5.2c1 0 2 .1 3 .4 2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.5A11.3 11.3 0 0 0 12 .7Z"/></svg>;
+}
+
+function Linkedin({ size = 20 }: { size?: number }) {
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5.3 7.7H1.7V22h3.6V7.7ZM3.5 1A2.1 2.1 0 1 0 3.5 5.2 2.1 2.1 0 0 0 3.5 1ZM22.3 13.8c0-4.3-2.3-6.3-5.4-6.3-2.5 0-3.6 1.4-4.2 2.3V7.7H9.1V22h3.6v-7.1c0-1.9.4-3.7 2.7-3.7 2.3 0 2.3 2.1 2.3 3.8v7h3.6l1-8.2Z"/></svg>;
+}
+
+type ProjectField = "All" | "Data Engineering" | "AI / ML" | "Flutter" | "Python";
+
+const skillTree = {
+  "Programming languages": { icon: Code2, description: "Languages I use to build data systems, services, automation, and mobile products.", branches: {
+    Python: ["FastAPI", "Django", "Flask", "Pandas", "PySpark", "Selenium", "BeautifulSoup", "pytest"],
+    Dart: ["Flutter SDK", "Firebase integration", "REST integration", "Material UI", "Widget testing"],
+    SQL: ["PostgreSQL", "Azure SQL", "Warehouse modeling", "Analytics queries", "Data validation"],
+  }},
+  "Data engineering": { icon: Database, description: "Reliable movement, transformation, validation, and serving of analytics-ready data.", branches: {
+    "Pipelines & ingestion": ["ETL / ELT", "REST & SOAP APIs", "SFTP", "Pagination", "Run ledgers", "Retries"],
+    "Processing & quality": ["Pandas", "PySpark", "Databricks", "Schema validation", "Data contracts", "Observability"],
+    "Warehousing & BI": ["PostgreSQL", "Azure SQL", "ADLS Gen2", "Data marts", "Power BI", "Dimensional modeling"],
+  }},
+  "Cloud & deployment": { icon: Cloud, description: "Cloud-native data and application delivery with secure, versioned infrastructure.", branches: {
+    Azure: ["Azure Functions", "Blob Storage", "ADLS Gen2", "Key Vault", "Managed Identity", "Bicep", "Databricks"],
+    AWS: ["S3", "EC2", "IAM", "CloudWatch", "Secure integrations"],
+    Delivery: ["Docker", "GitHub Actions", "CI/CD", "Environment isolation", "Secret management", "Render"],
+  }},
+  "AI & machine learning": { icon: BrainCircuit, description: "Applied intelligence that is evaluated, explainable, and integrated into real products.", branches: {
+    "Machine learning": ["Scikit-learn", "TensorFlow", "Feature engineering", "Model evaluation", "SHAP", "Random Forest"],
+    "Document intelligence": ["OCR", "RAG workflows", "Document Q&A", "Embeddings", "Summarization", "Quiz generation"],
+    "Computer vision": ["OpenCV", "Image preprocessing", "Visual inference", "AR workflows", "Model serving"],
+  }},
+  "Backend & automation": { icon: Server, description: "Python services and automation designed around reliability, security, and maintainability.", branches: {
+    "Backend APIs": ["FastAPI", "Django", "Flask", "REST APIs", "Authentication", "PostgreSQL"],
+    Automation: ["Web scraping", "Selenium", "Document automation", "Scheduled jobs", "API integrations", "Monitoring"],
+    Quality: ["API testing", "Data quality", "Regression testing", "Error handling", "Security boundaries"],
+  }},
+  "Flutter products": { icon: Smartphone, description: "Cross-platform experiences connected to real services, data, and intelligent features.", branches: {
+    Flutter: ["Dart", "Responsive UI", "State management", "Navigation", "Widget testing", "Release builds"],
+    "Cloud services": ["Firebase", "Supabase", "Authentication", "Storage", "Realtime data", "Push workflows"],
+    Integration: ["REST APIs", "Python backends", "Model inference", "File workflows", "Camera & media"],
+  }},
+} as const;
+
+type SkillCategory = keyof typeof skillTree;
 
 const projects = [
-  { name: "AskDocAI", label: "AI document intelligence", description: "Conversational document Q&A, summaries, and quiz generation in a mobile-first experience.", stack: ["Flutter", "Python", "AI & Data"], image: "/projects/askdocai-mobile-launch.png", href: "https://github.com/Abdul-Hadi-Jalil/AskDocAI", tone: "violet" },
-  { name: "StudyAce AI", label: "AI-powered learning", description: "A focused learning product that brings intelligent assistance into a practical study workflow.", stack: ["Flutter", "AI & Data"], image: "/projects/studyace-mobile-login.png", href: "https://github.com/Abdul-Hadi-Jalil/StudyAce-AI", tone: "blue" },
-  { name: "DocuMind", label: "Full-stack AI workspace", description: "A clean web workspace for understanding and working with documents through AI.", stack: ["Python", "Web", "AI & Data"], image: "/projects/documind-landing.png", href: "https://github.com/Abdul-Hadi-Jalil/DocuMind", tone: "amber" },
-  { name: "AR Wardrobe", label: "Computer vision & mobile", description: "An augmented-reality wardrobe concept exploring visual product interaction on mobile.", stack: ["Flutter", "AI & Data"], image: "/projects/ar-wardrobe-mobile.png", href: "https://github.com/Abdul-Hadi-Jalil/AR-Wardrobe", tone: "pink" },
-  { name: "Marrow Insight", label: "Healthcare intelligence", description: "A data-led healthcare interface designed to make complex analytical information easier to navigate.", stack: ["Python", "Web", "AI & Data"], image: "/projects/marrow-insight-home.png", href: "https://github.com/Abdul-Hadi-Jalil/Marrow-Insight", tone: "teal" },
-  { name: "UCP StudyHub", label: "Education platform", description: "A learning-resource application with discovery, PDF viewing, role-aware navigation, and administration.", stack: ["Flutter", "AI & Data"], image: "/projects/ucp-studyhub-mobile-login.png", href: "https://github.com/Abdul-Hadi-Jalil/ucp-studyhub", tone: "indigo" },
-  { name: "SahiCheck", label: "Cross-platform product", description: "A carefully structured mobile experience with authentication and an approachable visual language.", stack: ["Flutter", "Python"], image: "/projects/sahicheck-mobile-login.png", href: "https://github.com/Abdul-Hadi-Jalil/SahiCheck", tone: "green" },
-  { name: "HousePrice Estimator", label: "Machine learning application", description: "A practical web interface that turns property inputs into a clear machine-learning estimate.", stack: ["Python", "Web", "AI & Data"], image: "/projects/estimator-form.png", href: "https://github.com/Abdul-Hadi-Jalil/HousePrice-Estimator", tone: "orange" },
-  { name: "Autism Spectrum Screening", label: "Responsible ML workflow", description: "A parent-focused screening application combining questionnaire guidance, profiles, and model serving.", stack: ["Flutter", "Python", "AI & Data"], image: "/projects/asd-care-mobile.png", href: "https://github.com/Abdul-Hadi-Jalil/Autistic-Spectrum-Disorder", tone: "cyan" },
+  { name: "Cloud Data Integration Platform", label: "Multi-source cloud ingestion", description: "Configuration-driven API ingestion, distributed transformation, validation, and analytics-ready delivery across Azure services.", fields: ["Data Engineering", "Python"], stack: ["Azure Functions", "PySpark", "Databricks", "Azure SQL"], href: "https://github.com/Abdul-Hadi-Jalil/cloud-data-integration-platform", visual: "architecture", flow: ["REST / SOAP", "Azure Functions", "Blob Storage", "Databricks", "Quality", "Analytics"] },
+  { name: "Azure Data Warehouse Platform", label: "Governed commerce analytics", description: "Immutable raw captures, idempotent retries, transactional warehouse rebuilds, analytical marts, and operational alerts.", fields: ["Data Engineering", "Python"], stack: ["ADLS Gen2", "PostgreSQL", "Bicep", "Power BI"], href: "https://github.com/Abdul-Hadi-Jalil/azure-data-warehouse-platform", visual: "architecture", flow: ["Commerce APIs", "Azure Functions", "ADLS Gen2", "PostgreSQL", "Data Marts", "Power BI"] },
+  { name: "Autism Screening ML", label: "Explainable machine learning", description: "A responsible screening workflow combining exploratory analysis, model comparison, evaluation, and SHAP-based explanations.", fields: ["AI / ML", "Python"], stack: ["Scikit-learn", "Pandas", "SHAP", "Jupyter"], href: "https://github.com/Abdul-Hadi-Jalil/asd-screening-ml", visual: "analysis", images: ["/projects/asd-model-comparison.png", "/projects/asd-shap-global.png"] },
+  { name: "Autistic Spectrum Disorder", label: "Flutter + explainable ML", description: "A parent-focused mobile screening product backed by Python model serving, Firebase profiles, and explainable predictions.", fields: ["Flutter", "AI / ML", "Python"], stack: ["Flutter", "FastAPI", "Firebase", "Random Forest"], href: "https://github.com/Abdul-Hadi-Jalil/Autistic-Spectrum-Disorder", visual: "mobile", images: ["/projects/asd-care-mobile.png"] },
+  { name: "AskDocAI", label: "Mobile document intelligence", description: "Document Q&A, summarization, and quiz generation delivered through a focused mobile experience and Python AI services.", fields: ["Flutter", "AI / ML", "Python"], stack: ["Flutter", "Python", "Document AI", "Firebase"], href: "https://github.com/Abdul-Hadi-Jalil/AskDocAI", visual: "mobile", images: ["/projects/askdocai-mobile-launch.png", "/projects/aifile-mobile-entry.png"] },
+  { name: "AR Wardrobe", label: "Computer vision + mobile", description: "A mobile product concept that combines wardrobe discovery, visual interaction, and augmented-reality workflows.", fields: ["Flutter", "AI / ML"], stack: ["Flutter", "Computer Vision", "AR", "Mobile UI"], href: "https://github.com/Abdul-Hadi-Jalil/AR-Wardrobe", visual: "mobile", images: ["/projects/ar-wardrobe-mobile.png", "/projects/ar-wardrobe-brands.png"] },
+  { name: "DocuMind", label: "AI document workspace", description: "A complete document workspace connecting OCR and conversational intelligence to a clear, practical user workflow.", fields: ["AI / ML", "Python"], stack: ["Python", "OCR", "Document Q&A", "APIs"], href: "https://github.com/Abdul-Hadi-Jalil/DocuMind", visual: "web", images: ["/projects/documind-landing.png"] },
+  { name: "Operations Document Automation", label: "Workflow automation", description: "Operations automation connecting work-management data, cloud storage, and planning documents with traceable outputs.", fields: ["Python", "Data Engineering"], stack: ["Python", "APIs", "Cloud Storage", "Automation"], href: "https://github.com/Abdul-Hadi-Jalil/operations-document-automation", visual: "architecture", flow: ["Work Systems", "Python Services", "Validation", "Cloud Storage", "Documents", "Monitoring"] },
 ];
 
-const stackGroups = [
-  { id: "Flutter", title: "Flutter products", summary: "Cross-platform applications from interface to backend integration.", tools: [["flutter", "Flutter"], ["dart", "Dart"], ["firebase", "Firebase"], ["supabase", "Supabase"], ["androidstudio", "Android Studio"], ["figma", "Figma"]] },
-  { id: "AI & Data", title: "AI & data engineering", summary: "Models, document intelligence, computer vision, and production data workflows.", tools: [["python", "Python"], ["tensorflow", "TensorFlow"], ["scikitlearn", "Scikit-learn"], ["pandas", "Pandas"], ["opencv", "OpenCV"], ["jupyter", "Jupyter"]] },
-  { id: "Python", title: "Python full stack", summary: "Reliable APIs, model serving, automation, and database-backed products.", tools: [["python", "Python"], ["fastapi", "FastAPI"], ["django", "Django"], ["flask", "Flask"], ["postgresql", "PostgreSQL"], ["docker", "Docker"]] },
-  { id: "Web", title: "Web engineering", summary: "Responsive interfaces connected to dependable Python services and databases.", tools: [["html5", "HTML"], ["css", "CSS"], ["javascript", "JavaScript"], ["django", "Django"], ["flask", "Flask"], ["postgresql", "PostgreSQL"]] },
-];
+const fieldFilters: ProjectField[] = ["All", "Data Engineering", "AI / ML", "Flutter", "Python"];
 
-const roleProfiles = [
-  { id: "data-engineer", title: "Data Engineer", short: "Data Engineering", summary: "Building dependable pipelines, warehouses, integrations, and analytics-ready data systems.", accent: "#b9ff66", skills: [
-    { label: "Python & SQL", value: 92 }, { label: "ETL / ELT", value: 90 }, { label: "Azure", value: 82 },
-    { label: "AWS", value: 76 }, { label: "Spark", value: 72 }, { label: "Warehousing", value: 86 },
-  ]},
-  { id: "ai-engineer", title: "AI / ML Engineer", short: "AI Engineering", summary: "Turning machine-learning and document-intelligence capabilities into usable products.", accent: "#8b7cff", skills: [
-    { label: "Model Serving", value: 88 }, { label: "Document AI", value: 92 }, { label: "Computer Vision", value: 80 },
-    { label: "LLM Workflows", value: 86 }, { label: "Scikit-learn", value: 88 }, { label: "TensorFlow", value: 78 },
-  ]},
-  { id: "data-scientist", title: "Data Scientist", short: "Data Science", summary: "Exploring data, engineering useful features, evaluating models, and communicating results.", accent: "#ffbf69", skills: [
-    { label: "EDA", value: 92 }, { label: "Pandas", value: 94 }, { label: "Feature Eng.", value: 86 },
-    { label: "Modeling", value: 88 }, { label: "Evaluation", value: 88 }, { label: "Visualization", value: 82 },
-  ]},
-  { id: "python-engineer", title: "Python Engineer", short: "Python", summary: "Developing APIs, automation, scraping, integrations, and maintainable backend services.", accent: "#5eead4", skills: [
-    { label: "FastAPI", value: 90 }, { label: "Django / Flask", value: 82 }, { label: "Web Scraping", value: 88 },
-    { label: "Automation", value: 92 }, { label: "REST APIs", value: 92 }, { label: "Testing", value: 80 },
-  ]},
-  { id: "flutter-developer", title: "Flutter Developer", short: "Flutter", summary: "Delivering polished cross-platform products with reliable state, APIs, and cloud services.", accent: "#64d8ff", skills: [
-    { label: "Flutter / Dart", value: 94 }, { label: "UI Systems", value: 92 }, { label: "State Mgmt.", value: 88 },
-    { label: "Firebase", value: 86 }, { label: "API Integration", value: 92 }, { label: "Mobile Release", value: 78 },
-  ]},
-  { id: "full-stack", title: "Full-Stack Developer", short: "Full Stack", summary: "Connecting responsive web experiences to robust APIs, databases, and deployment workflows.", accent: "#ff7aa8", skills: [
-    { label: "Web Interfaces", value: 84 }, { label: "Backend APIs", value: 92 }, { label: "PostgreSQL", value: 86 },
-    { label: "Auth & Security", value: 82 }, { label: "Docker", value: 78 }, { label: "Deployment", value: 82 },
-  ]},
-  { id: "quality-engineer", title: "Software QA Engineer", short: "Quality Engineering", summary: "Designing practical quality checks across APIs, interfaces, data flows, and releases.", accent: "#f8e16c", skills: [
-    { label: "Test Design", value: 82 }, { label: "API Testing", value: 84 }, { label: "UI Testing", value: 78 },
-    { label: "Data Quality", value: 88 }, { label: "Automation", value: 80 }, { label: "Regression", value: 78 },
-  ]},
-];
-
-function point(value: number, index: number, total = 6, radius = 128) {
-  const angle = -Math.PI / 2 + index * Math.PI * 2 / total;
-  const r = radius * value / 100;
-  return [160 + Math.cos(angle) * r, 160 + Math.sin(angle) * r];
+function ArchitectureVisual({ flow }: { flow: readonly string[] }) {
+  const icons = [Cloud, Server, Database, Network, CheckCircle2, BarChart3];
+  return <div className="architecture-visual" aria-label={`Architecture flow: ${flow.join(" to ")}`}>{flow.map((item, index) => { const Icon = icons[index % icons.length]; return <div className="flow-step" key={item}><div className={`flow-node node-${index}`}><Icon size={21}/><span>{item}</span></div>{index < flow.length - 1 && <ArrowRight className="flow-arrow" size={18}/>}</div>; })}</div>;
 }
-function polygon(values: number[]) { return values.map((value, index) => point(value, index, values.length).join(",")).join(" "); }
+
+function ProjectVisual({ project }: { project: typeof projects[number] }) {
+  if (project.visual === "architecture" && project.flow) return <ArchitectureVisual flow={project.flow}/>;
+  if (project.visual === "mobile") return <div className="phone-gallery">{project.images?.map((image, index) => <div className={`phone phone-${index}`} key={image}><span/><img src={image} alt={`${project.name} screen ${index + 1}`}/></div>)}</div>;
+  if (project.visual === "analysis") return <div className="analysis-gallery">{project.images?.map((image, index) => <figure key={image}><img src={image} alt={`${project.name} analysis ${index + 1}`}/></figure>)}</div>;
+  return <div className="browser-frame"><div className="browser-bar"><i/><i/><i/></div><img src={project.images?.[0]} alt={`${project.name} interface`}/></div>;
+}
 
 export default function Home() {
-  const [filter, setFilter] = useState<Field>("All");
-  const [activeStack, setActiveStack] = useState(stackGroups[0]);
-  const [activeRole, setActiveRole] = useState(roleProfiles[0]);
-  const [hoveredSkill, setHoveredSkill] = useState<number | null>(null);
-  const visible = filter === "All" ? projects : projects.filter((project) => project.stack.includes(filter));
+  const [mobileNav, setMobileNav] = useState(false);
+  const [category, setCategory] = useState<SkillCategory>("Programming languages");
+  const branches = skillTree[category].branches;
+  const [branch, setBranch] = useState<string>(Object.keys(branches)[0]);
+  const [projectFilter, setProjectFilter] = useState<ProjectField>("All");
+  const activeTools = branches[branch as keyof typeof branches] as readonly string[];
+  const visibleProjects = projectFilter === "All" ? projects : projects.filter(project => project.fields.includes(projectFilter));
+  function chooseCategory(next: SkillCategory) { setCategory(next); setBranch(Object.keys(skillTree[next].branches)[0]); }
+  function sendMessage(event: FormEvent<HTMLFormElement>) { event.preventDefault(); const data = new FormData(event.currentTarget); const subject = encodeURIComponent(String(data.get("subject") || "Portfolio enquiry")); const message = encodeURIComponent(`Name: ${data.get("name")}\nEmail: ${data.get("email")}\n\n${data.get("message")}`); window.location.href = `mailto:abdulhadijalil34@gmail.com?subject=${subject}&body=${message}`; }
 
-  return <main>
-    <nav className="nav-shell" aria-label="Primary navigation">
-      <a className="brand" href="#top"><span>AH</span><strong>Abdul Hadi Jalil</strong></a>
-      <div className="nav-links"><a href="#about">About</a><a href="#stack">Stack</a><a href="#work">Projects</a></div>
-      <a className="nav-cta" href="https://github.com/Abdul-Hadi-Jalil" target="_blank" rel="noreferrer">GitHub <ArrowRight size={15}/></a>
-    </nav>
+  return <main id="top">
+    <nav className="site-nav"><a className="nav-brand" href="#top"><span>AH</span><strong>Abdul Hadi Jalil</strong></a><button className="nav-toggle" onClick={() => setMobileNav(!mobileNav)} aria-label="Toggle navigation">{mobileNav ? <X/> : <Menu/>}</button><div className={`nav-links ${mobileNav ? "open" : ""}`} onClick={() => setMobileNav(false)}><a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#contact">Contact</a></div><a className="nav-hire" href="#contact">Let&apos;s talk <ArrowRight size={15}/></a></nav>
 
-    <section className="hero" id="top">
-      <div className="hero-grid" aria-hidden="true"/>
-      <div className="hero-copy"><div className="availability"><span/>Available for opportunities</div><p className="eyebrow">Data &amp; AI engineer · Flutter &amp; Python developer</p><h1>I engineer intelligent products with <em>clarity and purpose.</em></h1><p className="hero-lede">From predictive systems and document intelligence to polished mobile and web products, I connect the model, the backend, and the experience.</p><div className="hero-actions"><a className="button button-primary" href="#about">Get to know me <ArrowRight size={17}/></a><a className="button button-secondary" href="#work">Explore projects</a></div></div>
-      <div className="hero-role-card"><div className="role-orbit"><span>Data</span><span>AI</span><span>Python</span><span>Flutter</span><div className="role-core"><Sparkles size={20}/><strong>Multi-disciplinary</strong><small>Engineer</small></div></div><p>One engineering profile across data systems, intelligent automation, mobile products, and full-stack delivery.</p><a href="#expertise">Explore role by role <ArrowRight size={15}/></a></div>
-    </section>
+    <section className="hero-section"><div className="hero-aura"/><div className="hero-content"><p className="intro-line">Hello, I&apos;m Abdul Hadi Jalil</p><h1>Data &amp; AI engineer building <em>reliable products</em> from pipeline to interface.</h1><p className="hero-summary">I design cloud data platforms, applied AI systems, Python services, and Flutter products—bringing architecture, implementation, and user experience into one clear delivery.</p><div className="hero-actions"><a className="button primary" href="#projects">View my work <ArrowRight size={17}/></a><button className="button secondary cv-pending" title="CV will be added after the verified document is provided" disabled><Download size={17}/>CV coming soon</button></div><div className="social-row" aria-label="Professional links"><a className="social github" href="https://github.com/Abdul-Hadi-Jalil" target="_blank" rel="noreferrer" aria-label="GitHub"><Github/></a><a className="social linkedin" href="https://www.linkedin.com/in/abdulhadijalil/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin/></a><a className="social email" href="mailto:abdulhadijalil34@gmail.com" aria-label="Email"><Mail/></a></div></div><div className="portrait-wrap"><div className="portrait-frame"><img src="/projects/abdul-hadi-professional.png" alt="Professional portrait of Abdul Hadi Jalil"/></div><div className="portrait-note"><span className="status-dot"/><div><strong>Available for opportunities</strong><small>Data · AI · Python · Flutter</small></div></div></div></section>
 
-    <section className="about-section" id="about"><div className="about-kicker"><span>01</span><p>About me</p></div><div className="about-copy"><h2>Range across disciplines.<br/><em>Focus on outcomes.</em></h2><p className="about-lead">I&apos;m Abdul Hadi Jalil—a data and AI engineer, Flutter developer, and Python full-stack developer.</p><div className="about-columns"><p>I work where intelligent models, reliable backend systems, and thoughtful interfaces meet. My projects span education, document intelligence, healthcare, augmented reality, and predictive applications.</p><p>I care about more than making software run. I structure products so clients and teams can understand the architecture, evaluate the decisions, and confidently build on the result.</p></div><a className="text-link" href="https://github.com/Abdul-Hadi-Jalil" target="_blank" rel="noreferrer"><ExternalLink size={18}/>Explore my engineering work</a></div></section>
+    <section className="about-simple" id="about"><div className="section-label"><span>01</span>About</div><div className="about-body"><p className="about-statement">I turn complex data and intelligent systems into software that people can understand, trust, and use.</p><div className="about-grid"><p>My work spans governed ingestion pipelines, analytical platforms, document intelligence, explainable machine learning, backend APIs, automation, and cross-platform mobile products.</p><p>I care about dependable architecture as much as the final experience. That means clear data contracts, isolated secrets, observable failures, maintainable services, and documentation that helps clients and engineering teams move forward confidently.</p></div><div className="focus-strip"><span>Data platforms</span><span>Applied AI</span><span>Python systems</span><span>Flutter products</span></div></div></section>
 
-    <section className="expertise-section" id="expertise"><div className="section-heading"><div><p className="eyebrow">Role-based experience</p><h2>Select a role.<br/>Inspect the depth.</h2></div><p>Choose the job profile relevant to your team. The chart changes to show the practical skills represented by my portfolio work.</p></div><div className="expertise-shell"><div className="role-selector" role="tablist" aria-label="Engineering roles">{roleProfiles.map(role => <button key={role.id} role="tab" aria-selected={activeRole.id===role.id} className={activeRole.id===role.id?"active":""} onClick={() => { setActiveRole(role); setHoveredSkill(null); }}><span>{role.title}</span><small>{role.skills.length} capabilities</small></button>)}</div><div className="experience-panel" style={{"--role-accent":activeRole.accent} as React.CSSProperties}><div className="experience-copy"><p className="eyebrow">Current view</p><h3>{activeRole.title}</h3><p>{activeRole.summary}</p><div className="metric-highlight"><strong>{hoveredSkill===null?activeRole.short:activeRole.skills[hoveredSkill].label}</strong><span>{hoveredSkill===null?"Hover or focus a point to inspect the level":`${activeRole.skills[hoveredSkill].value}% relative project depth`}</span></div></div><div className="interactive-radar"><svg viewBox="0 0 320 320" role="img" aria-label={`${activeRole.title} capability chart`}>{[25,50,75,100].map(level => <polygon key={level} points={polygon(activeRole.skills.map(() => level))} className="radar-grid"/>)}{activeRole.skills.map((_,i) => { const [x,y]=point(100,i); return <line key={i} x1="160" y1="160" x2={x} y2={y} className="radar-axis"/>; })}<polygon points={polygon(activeRole.skills.map(item => item.value))} className="radar-shape"/>{activeRole.skills.map((item,index) => { const [x,y]=point(100,index); const [px,py]=point(item.value,index); return <g key={item.label} className="radar-skill" tabIndex={0} role="button" aria-label={`${item.label}: ${item.value}%`} onMouseEnter={() => setHoveredSkill(index)} onMouseLeave={() => setHoveredSkill(null)} onFocus={() => setHoveredSkill(index)} onBlur={() => setHoveredSkill(null)}><circle cx={px} cy={py} r={hoveredSkill===index?7:5} className="radar-dot"/><circle cx={px} cy={py} r="16" className="radar-hit"/><text x={x} y={y+(y<160?-13:20)} textAnchor={x<150?"end":x>170?"start":"middle"} className="radar-label">{item.label}</text>{hoveredSkill===index&&<g className="radar-tooltip"><rect x={px-27} y={py-38} width="54" height="25" rx="8"/><text x={px} y={py-21} textAnchor="middle">{item.value}%</text></g>}</g>; })}</svg><p>Relative depth based on implemented portfolio work—not a certification score.</p></div></div></div></section>
+    <section className="skills-section" id="skills"><div className="section-heading"><div><p className="eyebrow">Explore the stack</p><h2>Skills, with the layers<br/>opened up.</h2></div><p>Select a field, then choose a specialization to inspect the platforms, frameworks, modules, and engineering practices behind it.</p></div><div className="skill-explorer"><div className="category-tabs" role="tablist">{(Object.keys(skillTree) as SkillCategory[]).map(item => { const Icon = skillTree[item].icon; return <button key={item} className={category === item ? "active" : ""} onClick={() => chooseCategory(item)}><Icon size={18}/><span>{item}</span></button>; })}</div><div className="skill-stage"><div className="skill-context"><p className="eyebrow">{category}</p><h3>{category}</h3><p>{skillTree[category].description}</p></div><div className="branch-tabs" role="tablist">{Object.keys(branches).map(item => <button key={item} className={branch === item ? "active" : ""} onClick={() => setBranch(item)}>{item}<ArrowRight size={14}/></button>)}</div><div className="tool-cloud" aria-live="polite">{activeTools.map((tool, index) => <span key={tool} style={{"--delay":`${index * 35}ms`} as React.CSSProperties}><CheckCircle2 size={15}/>{tool}</span>)}</div></div></div></section>
 
-    <section className="stack-section" id="stack"><div className="section-heading"><div><p className="eyebrow">Technology stack</p><h2>Choose a field.<br/>See the tools behind it.</h2></div><p>Select a discipline to explore the technologies, products, frameworks, and platforms I have worked with.</p></div><div className="stack-explorer"><div className="stack-tabs" role="tablist">{stackGroups.map((group,index) => <button key={group.id} className={activeStack.id===group.id?"active":""} onClick={() => setActiveStack(group)} role="tab" aria-selected={activeStack.id===group.id}><span>0{index+1}</span><strong>{group.title}</strong><ArrowRight size={18}/></button>)}</div><div className="stack-detail" role="tabpanel"><p className="stack-summary">{activeStack.summary}</p><div className="tool-grid">{activeStack.tools.map(([slug,name]) => <div className="tool" key={name}><img src={`https://cdn.simpleicons.org/${slug}`} alt=""/><span>{name}</span></div>)}</div></div></div></section>
+    <section className="projects-section" id="projects"><div className="section-heading"><div><p className="eyebrow">Selected engineering work</p><h2>Systems made<br/>visible.</h2></div><p>Architecture views for data and AI systems; real product screens for mobile and web experiences.</p></div><div className="project-filters">{fieldFilters.map(field => <button key={field} className={projectFilter === field ? "active" : ""} onClick={() => setProjectFilter(field)}>{field}<span>{field === "All" ? projects.length : projects.filter(project => project.fields.includes(field)).length}</span></button>)}</div><div className="project-list">{visibleProjects.map((project, index) => <article className={`showcase-card visual-${project.visual}`} key={project.name}><div className="project-visual"><ProjectVisual project={project}/></div><div className="project-copy"><p className="project-number">{String(index + 1).padStart(2,"0")} / {project.label}</p><h3>{project.name}</h3><p>{project.description}</p><ul>{project.stack.map(item => <li key={item}>{item}</li>)}</ul><a href={project.href} target="_blank" rel="noreferrer">View repository <ExternalLink size={15}/></a></div></article>)}</div></section>
 
-    <section className="section" id="work"><div className="section-heading"><div><p className="eyebrow">Selected work</p><h2>Filter the portfolio<br/>by your priority.</h2></div><p>Projects often cross disciplines. Choose a field to focus the collection, then open any repository for its code and documentation.</p></div><div className="filter-bar">{(["All","AI & Data","Python","Flutter","Web"] as Field[]).map(item => <button key={item} className={filter===item?"active":""} onClick={() => setFilter(item)}>{item}<span>{item==="All"?projects.length:projects.filter(p => p.stack.includes(item)).length}</span></button>)}</div><p className="results-note">Showing {visible.length} project{visible.length!==1?"s":""}{filter!=="All"&&<> in <strong>{filter}</strong></>}</p><div className="projects-grid">{visible.map((project,index) => <article className={`project-card tone-${project.tone}`} key={project.name}><div className="project-content"><div><p className="project-index">0{index+1} / {project.label}</p><h3>{project.name}</h3><p>{project.description}</p></div><div><div className="tags">{project.stack.map(item => <span key={item}>{item}</span>)}</div><a href={project.href} target="_blank" rel="noreferrer">View project <ExternalLink size={15}/></a></div></div><div className="project-media"><div className="media-glow"/><img src={project.image} alt={`${project.name} interface preview`}/></div></article>)}</div><a className="all-projects" href="https://github.com/Abdul-Hadi-Jalil?tab=repositories" target="_blank" rel="noreferrer">View all repositories <ArrowRight size={17}/></a></section>
+    <section className="experience-section" id="experience"><div className="section-heading"><div><p className="eyebrow">Professional record</p><h2>Experience,<br/>verified.</h2></div><p>This section is prepared for your employment history, achievements, certifications, and downloadable CV. Only verified details from the documents you provide will be published.</p></div><div className="credential-preview"><div><BriefcaseBusiness/><h3>Work experience</h3><p>Role, organization, period, measurable contribution, and verification links.</p></div><div><Sparkles/><h3>Achievements</h3><p>A clear timeline for awards, milestones, and professional recognition.</p></div><div><Blocks/><h3>Certifications</h3><p>Credential name, issuing organization, date, and supporting certificate.</p></div></div><p className="pending-note">Pending your CV, role-specific resumes, and credential files. No unverified claims are shown.</p></section>
 
-    <section className="contact-section"><p className="eyebrow">For teams, clients, and collaborators</p><h2>Let&apos;s build something<br/><em>worth using.</em></h2><a className="button button-light" href="https://github.com/Abdul-Hadi-Jalil" target="_blank" rel="noreferrer">Connect on GitHub <ArrowRight size={18}/></a></section>
-    <footer><div className="brand"><span>AH</span><strong>Abdul Hadi Jalil</strong></div><p>Data &amp; AI engineer · Flutter &amp; Python full-stack developer</p><p>© 2026</p></footer>
+    <section className="contact-section" id="contact"><div className="contact-intro"><p className="eyebrow">Start a conversation</p><h2>Have a data, AI, Python, or Flutter problem?</h2><p>Tell me what you are building, what is blocked, and what a successful outcome looks like.</p><div className="contact-methods"><a href="mailto:abdulhadijalil34@gmail.com"><span className="contact-icon email"><Mail/></span><div><small>Email</small><strong>abdulhadijalil34@gmail.com</strong></div></a><a href="https://www.linkedin.com/in/abdulhadijalil/" target="_blank" rel="noreferrer"><span className="contact-icon linkedin"><Linkedin/></span><div><small>LinkedIn</small><strong>Connect professionally</strong></div></a><a href="https://github.com/Abdul-Hadi-Jalil" target="_blank" rel="noreferrer"><span className="contact-icon github"><Github/></span><div><small>GitHub</small><strong>Explore the code</strong></div></a></div></div><form className="contact-form" onSubmit={sendMessage}><div className="form-row"><label>Your name<input name="name" required placeholder="Name"/></label><label>Your email<input name="email" type="email" required placeholder="you@company.com"/></label></div><label>Subject<input name="subject" required placeholder="Project or opportunity"/></label><label>Message<textarea name="message" rows={6} required placeholder="A short description of what you need..."/></label><button type="submit">Send message <Send size={17}/></button></form></section>
+
+    <footer><a className="nav-brand" href="#top"><span>AH</span><strong>Abdul Hadi Jalil</strong></a><p>Data &amp; AI engineer · Flutter &amp; Python full-stack developer</p><span>© 2026</span></footer>
   </main>;
 }
